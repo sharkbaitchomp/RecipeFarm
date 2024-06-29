@@ -1,11 +1,11 @@
 import './App.css';
 import React from 'react';
-import { getRecipes } from './recipeFunctionality'
 import { CssBaseline, Paper, Grid, Button, TextField, Stack, Box, Typography, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 
 import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 import { IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu, Edit } from '@mui/icons-material';
+import RecipePage from './recipeFunctionality';
 
 function App() {
   const [name, setName] = React.useState('');
@@ -308,6 +308,9 @@ function MainPage() {
                 <IconButton onClick={handleDrawerOpen} style={{ fontSize: 'large', color: 'black' }}>
                   <Menu />
                 </IconButton>
+              </Grid>
+              <Grid item >
+                <RecipePage />
               </Grid>
             </Grid>
             <SidebarMenu open={drawerOpen} onClose={handleDrawerClose} />
