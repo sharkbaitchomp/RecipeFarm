@@ -1,7 +1,5 @@
-
-const BASE_URL = "api.edamam.com/";
-const appId = "64f065c0";
-const appKey = "38e83f8244e4639d678b7d2f70d265e1";
+const appId = "92c98664";
+const appKey = "38241f816e4c455f1e0dd34dfbaa3aba";
 
 // Health (String array)
 // Available values : alcohol-cocktail, alcohol-free, celery-free, crustacean-free, 
@@ -19,33 +17,41 @@ const appKey = "38e83f8244e4639d678b7d2f70d265e1";
 
 /**
  * @param {string} search // String you wanna search
- * @param {string[]} diet // Available values : balanced, high-fiber, high-protein, low-carb, low-fat, low-sodium
  * @param {string[]} health
- * @param {number} timeMin
  * @param {number} timeMax 
  * @param {string[]} excluded 
  */
-async function getRecipes(search, diet, health, timeMax, excluded) {
-  const response = await fetch("api.edamam.com/api/recipes/v2");
-  console.log(response);
+export async function getRecipes(search, health, timeMax, excluded) {
+  let url =`https://api.edamam.com/api/recipes/v2/?q=${search}&app_id=${appId}&app_key=${appKey}&type=public`;
 
-  // const response = await fetch("api.edamam.com/api/recipes/v2", {
-  //   method: "GET",
-  //   qs: JSON.stringify({
-  //     type: "public",
-  //     q: search,
-  //     app_id: appId,
-  //     app_key: appKey,
-  //     random: true,
-  //     diet: diet,
-  //     health: health,
-  //     excluded: excluded,
-  //     time: timeMax,
-  //     field: ["uri", "image", "url", "yield", "dietLabels", "healthLabels", "ingredientLines", "calories", "totalTime", "mealType"],
-  //   })
-  // });
-  // const responseParsed = await response.json();
-  // console.log(responseParsed);
+  if (health.length) {
+    const healthString = health.join(",");
+    url += `&health=${encodeURIComponent(healthString)}`;
+  }
+
+  url += `&time=${timeMax}`;
+
+  for (const item of excluded) {
+    url += `&excluded=${item}`;
+  }
+  
+  const response = await fetch(url);
+  const data = await response.json();
+
+  const list = data.hits.map(resipee => resipee.recipe);
+  const array = [];
+
+  for (const recipe of list) {
+    array.push({
+      images: recipe.images,
+      ingredients: recipe.ingredients,
+      name: recipe.label,
+      uri: recipe.uri,
+      url: recipe.url
+    })
+  }
+  
+  return array;
 }
 
 // field

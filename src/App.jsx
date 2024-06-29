@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react';
+import { getRecipes } from './recipeFunctionality'
 import { CssBaseline, Paper, Grid, Button, TextField, Stack } from '@mui/material'
 
 import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -88,7 +89,7 @@ function MainPage() {
 
   return (
     <div>
-    hello
+    hello {console.log(getRecipes("chicken", [], 10, []))}
     </div>
   )
 }
