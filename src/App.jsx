@@ -86,7 +86,7 @@ function StartPage() {
       <div style={styleContent}>
         <div style={styleItems}>
           <Typography style={{color:"blue", size: "2em"}}>
-            Please choose an option from the sidebar.
+            {getRecipes("chicken", [], [], 50, [])}
             <br></br>
           </Typography>
         </div>
