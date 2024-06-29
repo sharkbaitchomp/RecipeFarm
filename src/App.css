@@ -12,3 +12,87 @@
   border: 0;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.plot {
+  position: absolute;
+  width: 13%;
+}
+
+.crops {
+  position: absolute;
+  width: 13%;
+}
+
+#carrot {
+  display: none;
+  margin-top: 1vh;
+}
+
+#corn {
+  display: none;
+  right: 24px;
+  bottom: 52vh
+}
+ 
+#lettuce {
+  display: none;
+  margin-top: 22vh;
+}
+ 
+#rice {
+  display: none;
+  margin-top: 44vh;
+}
+ 
+#tomato {
+  display: none;
+  right: 20px;
+  bottom: 27vh;
+}
+ 
+#wheat {
+  display: none;
+  right: 20px;
+  bottom: 4vh;
+}
+
+
+#chicken {
+  display: none;
+  position: absolute;
+  width: 6%;
+  bottom: 0.25vh;
+  left: 17vw;
+}
+
+#cow {
+  display: none;
+  position: absolute;
+  width: 7.5%;
+  bottom: 0.25vh;
+  left: 31vw;
+}
+
+#duck {
+  display: none;
+  position: absolute;
+  width: 4.5%;
+  bottom: 0.25vh;
+  left: 48vw;
+}
+
+#pig {
+  display: none;
+  position: absolute;
+  width: 7%;
+  bottom: 0.25vh;
+  left: 63vw;
+}
+
+#sheep {
+  display: none;
+  position: absolute;
+  width: 7%;
+  bottom: 0.25vh;
+  left: 77vw;
+}

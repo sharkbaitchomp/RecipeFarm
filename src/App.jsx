@@ -5,14 +5,21 @@ import { CssBaseline, Paper, Grid, Button, TextField, Stack, Box, Typography, Di
 import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 import { IconButton, List, ListItem, ListItemText } from '@mui/material';
 import { Menu } from '@mui/icons-material';
+import FarmImages from './images';
 
-// let items = [wheat, chicken, rice, cow, corn, pig, carrot, sheep, lettuce, duck, tomato];
+let items = ['Wheat', 'Chicken', 'Rice', 'Cow', 'Corn', 'Pig', 'Carrot', 'Sheep', 'Lettuce', 'Duck', 'Tomato'];
+
+// Code from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomIntInclusive(min, max) { 
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+}
 
 function App() {
   const [name, setName] = React.useState('');
   const [age, setAge] = React.useState('');
   
-
   const setNameAbstract = (name) => {
     setName(name);
     localStorage.setItem('name', name);
@@ -89,6 +96,81 @@ function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
     </div>
   )
 }
+
+const ImageGallery = () => {
+  const [images, setImages] = React.useState([]);
+  const MAX_IMAGE_SIZE = 2.5 * 1024 * 1024; // 2.5 MB
+
+  React.useEffect(() => {
+    loadImages();
+  }, []);
+
+  const handleImageInput = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        alert('Image size exceeds 2.5 MB. Please choose a smaller image.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        addImageToGallery(dataUrl);
+        saveImage(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+  function getItem() {
+    if (items.length < 1) {
+      alert('Already obtained all items!');
+      return;
+    }
+
+    const number = getRandomIntInclusive(0, items.length - 1);
+    const item = items.splice(number, 1)[0]; 
+
+    console.log(item, items.length);
+    document.getElementById(item.toLowerCase()).style.display = 'block'
+    alert(`You got ${item}!`);
+  }
+
+  const addImageToGallery = (dataUrl) => {
+    setImages(prevImages => [...prevImages, dataUrl]);
+
+    getItem();
+  };
+
+  const saveImage = (dataUrl) => {
+    const images = JSON.parse(localStorage.getItem('images')) || [];
+    images.push(dataUrl);
+    try {
+      localStorage.setItem('images', JSON.stringify(images));
+    } catch (e) {
+      console.error('Error saving to localStorage:', e);
+    }
+  };
+
+  const loadImages = () => {
+    const images = JSON.parse(localStorage.getItem('images')) || [];
+    setImages(images);
+  };
+
+  return (
+    <div>
+      <input type="file" accept="image/*" onChange={handleImageInput} />
+      <div id="gallery" style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {images.map((dataUrl, index) => (
+          <div key={index} className="gallery-item" style={{ margin: '10px' }}>
+            <img src={dataUrl} alt={`Gallery item ${index}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 function SidebarMenu({ open, onClose }) {
   const [renderDrawer, setRenderDrawer] = React.useState(open);
@@ -180,7 +262,7 @@ function SidebarMenu({ open, onClose }) {
         </ListItem>
 
         <Dialog open={modalOpen} onClose={handleModalClose}>
-          <DialogTitle>Details</DialogTitle>
+          <DialogTitle>My Details ʕ•́ᴥ•̀ʔっ♡</DialogTitle>
           <DialogContent>
             <p>Name: {storedName}</p>
             <p>Age: {storedAge}</p>
@@ -199,9 +281,9 @@ function SidebarMenu({ open, onClose }) {
         </ListItem>
 
         <Dialog open={galleryModalOpen} onClose={handleGalleryModalClose}>
-          <DialogTitle>Gallery</DialogTitle>
+          <DialogTitle>My Gallery ᕙ(`▿´)ᕗ</DialogTitle>
           <DialogContent>
-            <p>Gallery content goes here...</p>
+            <ImageGallery />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleGalleryModalClose} color="primary">
@@ -233,6 +315,7 @@ function MainPage() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', backgroundColor:'pink' }}>
+      <FarmImages/>
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Stack spacing={2}>
           <Paper elevation={5} style={{ padding: '30px', width: '1000px', height: '600px', position: 'relative' }}>
@@ -246,7 +329,7 @@ function MainPage() {
               style={{ height: '100%' }}
             >
               <Grid item xs={12}>
-                <h1>{storedName} farm</h1>
+                <h1>{storedName}'s farm</h1>
               </Grid>
               <Grid item xs={12} style={{ position: 'absolute', top: 16, left: 16 }}>
                 <IconButton onClick={handleDrawerOpen} style={{ fontSize: 'large', color: 'black' }}>
@@ -260,26 +343,6 @@ function MainPage() {
       </div>
     </div>
   );
-}
-
-function getItem() {
-
-  // Code from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-  function getRandomIntInclusive(min, max) { 
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
-  }
-
-
-  let numItems = localStorage.getItem('numItems')
-
-  const number = getRandomIntInclusive(0, numItems - 1);
-  const item = items.splice(number, 1); 
-
-  localStorage.setItem('numItems', numItems - 1);
-  console.log(numItems, item);
-
 }
 
 export default App;
