@@ -87,6 +87,64 @@ function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
   )
 }
 
+const ImageGallery = () => {
+  const [images, setImages] = React.useState([]);
+  const MAX_IMAGE_SIZE = 2.5 * 1024 * 1024; // 2.5 MB
+
+  React.useEffect(() => {
+    loadImages();
+  }, []);
+
+  const handleImageInput = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      if (file.size > MAX_IMAGE_SIZE) {
+        alert('Image size exceeds 2.5 MB. Please choose a smaller image.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        addImageToGallery(dataUrl);
+        saveImage(dataUrl);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const addImageToGallery = (dataUrl) => {
+    setImages(prevImages => [...prevImages, dataUrl]);
+  };
+
+  const saveImage = (dataUrl) => {
+    const images = JSON.parse(localStorage.getItem('images')) || [];
+    images.push(dataUrl);
+    try {
+      localStorage.setItem('images', JSON.stringify(images));
+    } catch (e) {
+      console.error('Error saving to localStorage:', e);
+    }
+  };
+
+  const loadImages = () => {
+    const images = JSON.parse(localStorage.getItem('images')) || [];
+    setImages(images);
+  };
+
+  return (
+    <div>
+      <input type="file" accept="image/*" onChange={handleImageInput} />
+      <div id="gallery" style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {images.map((dataUrl, index) => (
+          <div key={index} className="gallery-item" style={{ margin: '10px' }}>
+            <img src={dataUrl} alt={`Gallery item ${index}`} style={{ maxWidth: '200px', maxHeight: '200px' }} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 function SidebarMenu({ open, onClose }) {
   const [renderDrawer, setRenderDrawer] = React.useState(open);
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -177,7 +235,7 @@ function SidebarMenu({ open, onClose }) {
         </ListItem>
 
         <Dialog open={modalOpen} onClose={handleModalClose}>
-          <DialogTitle>Details</DialogTitle>
+          <DialogTitle>My Details ʕ•́ᴥ•̀ʔっ♡</DialogTitle>
           <DialogContent>
             <p>Name: {storedName}</p>
             <p>Age: {storedAge}</p>
@@ -196,9 +254,9 @@ function SidebarMenu({ open, onClose }) {
         </ListItem>
 
         <Dialog open={galleryModalOpen} onClose={handleGalleryModalClose}>
-          <DialogTitle>Gallery</DialogTitle>
+          <DialogTitle>My Gallery ᕙ(`▿´)ᕗ</DialogTitle>
           <DialogContent>
-            <p>Gallery content goes here...</p>
+            <ImageGallery />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleGalleryModalClose} color="primary">
@@ -243,7 +301,7 @@ function MainPage() {
               style={{ height: '100%' }}
             >
               <Grid item xs={12}>
-                <h1>{storedName} farm</h1>
+                <h1>{storedName}'s farm</h1>
               </Grid>
               <Grid item xs={12} style={{ position: 'absolute', top: 16, left: 16 }}>
                 <IconButton onClick={handleDrawerOpen} style={{ fontSize: 'large', color: 'black' }}>
@@ -258,6 +316,5 @@ function MainPage() {
     </div>
   );
 }
-
 
 export default App;
