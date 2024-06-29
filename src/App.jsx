@@ -1,51 +1,8 @@
 import './App.css';
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Link, CssBaseline, Button, Drawer } from '@mui/material';
-import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { CssBaseline, Paper, Grid, Button, TextField, Stack } from '@mui/material'
 
-function Navbar() {
-  const navigate = useNavigate();
-
-  
-  const go = (where) => {
-    navigate(where);
-  };
-
-  const styleNav = {
-    height:'100vh', 
-    "zIndex": 100, 
-    "backgroundColor":"#eee", 
-    width: '100px',
-    position: 'fixed',
-    right: 0,
-  }
-
-  return (
-    <div className="navbar" style={styleNav}>
-      <Toolbar style={{flexDirection: 'column'}}>
-        <Button variant="outlined" color="primary" onClick={() => go('/home')}>
-          Home
-        </Button>
-      </Toolbar>
-    </div>
-  )
-}
-
-
-function Footer() {
-  const styleFooter = {
-    height: "50px",
-    position:"fixed",
-    bottom: 0,
-    width: "100vw",
-    backgroundColor: "#999",
-  }
-  return(
-    <div style={styleFooter}>
-
-    </div>
-  )
-}
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
@@ -62,36 +19,46 @@ function App() {
 }
 
 function StartPage() {
+  const [name, setName] = React.useState('');
+  const [age, setAge] = React.useState('');
 
-  const styleContent = {
-    height: "calc(100vh - 50px)",
-    width: "calc(100vw - 100px)",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    margin: "auto",
-    padding: "auto",
-  }
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Stack spacing={2}>
+        <Paper elevation={5} style={{ padding: 30, width: 600 }}>
+          <Grid
+            container
+            spacing={3}
+            direction={'column'}
+            justify={'center'}
+            alignItems={'center'}
+            textAlign={'center'}
+          >
+            <Grid item xl>
+              <h1>Welcome to your Recipie Farm! <br/>
+              Start farming today!</h1>
+            </Grid>
+            <Grid item xl>
+              <TextField style={{ width: 500 }}variant='outlined' label="Name" onChange={e => setName(e.target.value)} value={name} type={'name'}></TextField>
+            </Grid>
+            <Grid item xl>
+              <TextField style={{ width: 500 }}variant='outlined' label="Age" onChange={e => setAge(e.target.value)} value={age} type={'age'}></TextField>
+            </Grid>
+            <Grid item xl>
+              <Button color='primary' variant='contained' style={{ width: 500, fontWeight: 'bold', fontSize: 30 }}> Enter </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Stack>
+    </div>
+  )
+}
 
-  const styleItems = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-  }
+function MainPage() {
 
   return (
     <div>
-    <Navbar />
-      <div style={styleContent}>
-        <div style={styleItems}>
-          <Typography style={{color:"blue", size: "2em"}}>
-            Please choose an option from the sidebar.
-            <br></br>
-          </Typography>
-        </div>
-      </div>
-    <Footer />
+    hello
     </div>
   )
 }
