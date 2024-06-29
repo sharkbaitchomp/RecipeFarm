@@ -1,97 +1,94 @@
 import './App.css';
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Link, CssBaseline, Button, Drawer } from '@mui/material';
+import React from 'react';
+import { CssBaseline, Paper, Grid, Button, TextField, Stack } from '@mui/material'
+
 import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 
-function Navbar() {
-  const navigate = useNavigate();
+function App() {
+  const [name, setName] = React.useState('');
+  const [age, setAge] = React.useState('');
 
-  
-  const go = (where) => {
-    navigate(where);
+  const setNameAbstract = (name) => {
+    setName(name);
+    localStorage.setItem('name', name);
   };
 
-  const styleNav = {
-    height:'100vh', 
-    "zIndex": 100, 
-    "backgroundColor":"#eee", 
-    width: '100px',
-    position: 'fixed',
-    right: 0,
-  }
+  const setAgeAbstract = (age) => {
+    setAge(age);
+    localStorage.setItem('age', age);
+  };
 
-  return (
-    <div className="navbar" style={styleNav}>
-      <Toolbar style={{flexDirection: 'column'}}>
-        <Button variant="outlined" color="primary" onClick={() => go('/home')}>
-          Home
-        </Button>
-      </Toolbar>
-    </div>
-  )
-}
-
-
-function Footer() {
-  const styleFooter = {
-    height: "50px",
-    position:"fixed",
-    bottom: 0,
-    width: "100vw",
-    backgroundColor: "#999",
-  }
-  return(
-    <div style={styleFooter}>
-
-    </div>
-  )
-}
-
-function App() {
   return (
     <div>
       <CssBaseline />
         <BrowserRouter>
           <Routes>
-              <Route path="/" element={<StartPage />}/>
-              <Route path="/home" element={<StartPage />} />
+              <Route path="/" element={<StartPage name={name} setNameAbstract={setNameAbstract} age={age} setAgeAbstract={setAgeAbstract} />}/>
+              <Route path="/home" element={<StartPage name={name} setNameAbstract={setNameAbstract} age={age} setAgeAbstract={setAgeAbstract} />}/>
+              <Route path="/main" element={<MainPage />}/>
           </Routes>
         </BrowserRouter>
     </div>
   );
 }
 
-function StartPage() {
+function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
+  setNameAbstract(name);
+  setAgeAbstract(age);
+  const navigate = useNavigate();
 
-  const styleContent = {
-    height: "calc(100vh - 50px)",
-    width: "calc(100vw - 100px)",
-    position: "fixed",
-    top: 0,
-    left: 0,
-    margin: "auto",
-    padding: "auto",
-  }
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      enter();
+    }
+  };
 
-  const styleItems = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
+  const enter = () => {
+    if (localStorage.getItem('name') === '' || localStorage.getItem('age') === '') {
+      alert('Please fill in all the forms');
+    } else {
+      navigate('/main');
+    }
   }
 
   return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} onKeyDown={handleKeyPress}>
+      <Stack spacing={2}>
+        <Paper elevation={5} style={{ padding: 30, width: 600 }}>
+          <Grid
+            container
+            spacing={3}
+            direction={'column'}
+            justify={'center'}
+            alignItems={'center'}
+            textAlign={'center'}
+          >
+            <Grid item xl>
+              <h1>Welcome to your Recipie Farm! <br/>
+              Start farming today!</h1>
+            </Grid>
+            <Grid item xl>
+              <TextField 
+              style={{ width: 500 }}variant='outlined' label="Name" onChange={e => setNameAbstract(e.target.value)} value={name} type={'name'}></TextField>
+            </Grid>
+            <Grid item xl>
+              <TextField style={{ width: 500 }}variant='outlined' label="Age" onChange={e => setAgeAbstract(e.target.value)} value={age} type={'age'}></TextField>
+            </Grid>
+            <Grid item xl>
+              <Button onClick={enter} color='primary' variant='contained' style={{ width: 500, fontWeight: 'bold', fontSize: 20 }}> Enter </Button>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Stack>
+    </div>
+  )
+}
+
+function MainPage() {
+
+  return (
     <div>
-    <Navbar />
-      <div style={styleContent}>
-        <div style={styleItems}>
-          <Typography style={{color:"blue", size: "2em"}}>
-            {getRecipes("chicken", [], [], 50, [])}
-            <br></br>
-          </Typography>
-        </div>
-      </div>
-    <Footer />
+    hello
     </div>
   )
 }
