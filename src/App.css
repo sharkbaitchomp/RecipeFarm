@@ -1,0 +1,21 @@
+
+/* body { */
+  /* height: 100vh; */
+  /* calc(100vh - footer) */
+  /* padding-top: 80px; */
+  /* height of header */
+
+/* } */
+
+* {
+  margin: 0;
+}
+
+.navbar {
+  height:'100vh';
+  z-index:0;
+  background-color:"#eee"; 
+  width: '100px';
+  position: 'fixed';
+  right: 0;
+}
