@@ -54,7 +54,7 @@ function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }} onKeyDown={handleKeyPress}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor:'pink' }} onKeyDown={handleKeyPress}>
       <Stack spacing={2}>
         <Paper elevation={5} style={{ padding: 30, width: 600 }}>
           <Grid
@@ -66,7 +66,8 @@ function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
             textAlign={'center'}
           >
             <Grid item xl>
-              <h1>Welcome to your Recipie Farm! <br/>
+              <h1>⋅˚₊‧ ୨𝓯𝓻𝓮𝓪𝓴𝔂୧ ‧₊˚ ⋅</h1>
+              <h1>Welcome to your Recipe Farm! <br/>
               Start farming today!</h1>
             </Grid>
             <Grid item xl>
@@ -77,7 +78,7 @@ function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
               <TextField style={{ width: 500 }}variant='outlined' label="Age" onChange={e => setAgeAbstract(e.target.value)} value={age} type={'age'}></TextField>
             </Grid>
             <Grid item xl>
-              <Button onClick={enter} color='primary' variant='contained' style={{ width: 500, fontWeight: 'bold', fontSize: 20 }}> Enter </Button>
+              <Button onClick={enter} color='primary' variant='contained' style={{ width: 500, fontWeight: 'bold', fontSize: 20, backgroundColor:'pink' }}> Enter </Button>
             </Grid>
           </Grid>
         </Paper>
@@ -143,7 +144,7 @@ function SidebarMenu({ open, onClose }) {
       }}
     >
       <Box sx={{ p: 2, textAlign: 'center' }}>
-        <Typography variant="h6">Menu</Typography>
+        <Typography variant="h6">Menu ☜(ˆ▿ˆc)</Typography>
         <IconButton onClick={onClose} sx={{ position: 'absolute', top: 10, right: 8 }}>
           <Menu />
         </IconButton>
@@ -164,7 +165,10 @@ function SidebarMenu({ open, onClose }) {
           <ListItemText primary="3. Take a pic of food" />
         </ListItem>
         <ListItem>
-          <ListItemText primary="4. Grow ur farm! :D" />
+          <ListItemText primary="4. Upload the pic into My Gallery (Image has to be 2.5mb or less)" />
+        </ListItem> 
+        <ListItem>
+          <ListItemText primary="5. Grow ur farm! :D" />
         </ListItem>          
         
         <Divider/>
@@ -225,7 +229,7 @@ function MainPage() {
   };
 
   return (
-    <div style={{ display: 'flex', height: '100vh' }}>
+    <div style={{ display: 'flex', height: '100vh', backgroundColor:'pink' }}>
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Stack spacing={2}>
           <Paper elevation={5} style={{ padding: '30px', width: '1000px', height: '600px', position: 'relative' }}>
