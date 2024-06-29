@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import { CssBaseline, Paper, Grid, Button, TextField, Stack } from '@mui/material'
+import { CssBaseline, Paper, Grid, Button, TextField, Stack, Box } from '@mui/material'
 
 import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -85,12 +85,36 @@ function StartPage({ name, setNameAbstract, age, setAgeAbstract }) {
 }
 
 function MainPage() {
+  const [items, setItems] = useState([]);
 
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem('items'));
+    if (items) {
+    setItems(items);
+    }
+  }, []);
   return (
-    <div>
-    hello
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Stack spacing={2}>
+        <Paper elevation={5} style={{ padding: '30px', width: '1000px', height: '600px' }}>
+          <Grid
+            container
+            spacing={3}
+            direction={'column'}
+            justify={'center'}
+            alignItems={'center'}
+            textAlign={'center'}
+          >
+            <Grid item xl>
+              <h1>Welcome to your Recipie Farm! <br/>
+              Start farming today!</h1>
+            </Grid>
+            
+          </Grid>
+        </Paper>
+      </Stack>
     </div>
-  )
+  );
 }
 
 export default App;
