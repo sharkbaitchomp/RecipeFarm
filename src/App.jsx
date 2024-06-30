@@ -6,6 +6,7 @@ import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
 import { IconButton, List, ListItem, ListItemText } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 import FarmImages from './images';
+import RecipePage from './recipeFunctionality';
 
 let items = ['Wheat', 'Chicken', 'Rice', 'Cow', 'Corn', 'Pig', 'Carrot', 'Sheep', 'Lettuce', 'Duck', 'Tomato'];
 
