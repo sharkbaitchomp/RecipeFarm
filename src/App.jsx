@@ -3,13 +3,23 @@ import React from 'react';
 import { CssBaseline, Paper, Grid, Button, TextField, Stack, Box, Typography, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 
 import { useNavigate, BrowserRouter, Routes, Route } from 'react-router-dom';
-import { IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { Menu, Edit } from '@mui/icons-material';
+import { IconButton, List, ListItem, ListItemText } from '@mui/material';
+import { Menu } from '@mui/icons-material';
+import FarmImages from './images';
+
+let items = ['Wheat', 'Chicken', 'Rice', 'Cow', 'Corn', 'Pig', 'Carrot', 'Sheep', 'Lettuce', 'Duck', 'Tomato'];
+
+// Code from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+function getRandomIntInclusive(min, max) { 
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
+}
 
 function App() {
   const [name, setName] = React.useState('');
   const [age, setAge] = React.useState('');
-
+  
   const setNameAbstract = (name) => {
     setName(name);
     localStorage.setItem('name', name);
@@ -112,8 +122,25 @@ const ImageGallery = () => {
     }
   };
 
+
+  function getItem() {
+    if (items.length < 1) {
+      alert('Already obtained all items!');
+      return;
+    }
+
+    const number = getRandomIntInclusive(0, items.length - 1);
+    const item = items.splice(number, 1)[0]; 
+
+    console.log(item, items.length);
+    document.getElementById(item.toLowerCase()).style.display = 'block'
+    alert(`You got ${item}!`);
+  }
+
   const addImageToGallery = (dataUrl) => {
     setImages(prevImages => [...prevImages, dataUrl]);
+
+    getItem();
   };
 
   const saveImage = (dataUrl) => {
@@ -288,6 +315,7 @@ function MainPage() {
 
   return (
     <div style={{ display: 'flex', height: '100vh', backgroundColor:'pink' }}>
+      <FarmImages/>
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Stack spacing={2}>
           <Paper elevation={5} style={{ padding: '30px', width: '1000px', height: '600px', position: 'relative' }}>
