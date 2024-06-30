@@ -336,6 +336,9 @@ function MainPage() {
                   <Menu />
                 </IconButton>
               </Grid>
+              <Grid item xs={12} style={{ position: 'absolute', left: "50%", transform: "translateX(-50%)" }}>
+                <RecipePage />
+              </Grid>
             </Grid>
             <SidebarMenu open={drawerOpen} onClose={handleDrawerClose} />
           </Paper>
