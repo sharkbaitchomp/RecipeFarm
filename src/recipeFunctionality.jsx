@@ -2,9 +2,10 @@ import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubheader from '@mui/material/ListSubheader';
-import React, { useState } from 'react';
-import { Label, LabelImportant } from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
 import { FormControl, TextField, Button, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
+
 
 const appId = "92c98664";
 const appKey = "38241f816e4c455f1e0dd34dfbaa3aba";
@@ -15,42 +16,60 @@ const appKey = "38241f816e4c455f1e0dd34dfbaa3aba";
  * @param {number} timeMax 
  * @param {string[]} excluded 
  */
-async function GetRecipes({search, timeMax, excluded, updateRecipe}) {
-  let url;
-
-  // if (search === "nuthin") {
-  //   url =`https://api.edamam.com/api/recipes/v2/?q=${search}&app_id=${appId}&app_key=${appKey}&type=public&random=true`;
-  // } else {
-  //   url =`https://api.edamam.com/api/recipes/v2/?app_id=${appId}&app_key=${appKey}&type=public&random=true`;
-  // }
-
-  // if (timeMax !== "nuthin") {
-  //   url += `&time=${timeMax}`;
-  // }
-  // if (excluded != "nuthin") {
-  //   for (const item of excluded.split(" ")) {
-  //     url += `&excluded=${item}`;
-  //   }
-  // }
+const GetRecipes = async(search, timeMax, excluded, updateRecipe) => {
+  const [recipes, setRecipes] = useState([]);
   
-  // const response = await fetch(url);
-  // const data = await response.json();
+  let url;
+  const searchUnpacked = search.search;
+  const timeMaxUnpacked = search.timeMax;
+  const excludedUnpacked = search.excluded;
+  const updateRecipeUnpacked = search.updateRecipe;
 
-  // const list = data.hits.map(resipee => resipee.recipe);
+  if (searchUnpacked !== "nuthin") {
+    url =`https://api.edamam.com/api/recipes/v2/?q=${search}&app_id=${appId}&app_key=${appKey}&type=public&random=true`;
+  } else {
+    url =`https://api.edamam.com/api/recipes/v2/?app_id=${appId}&app_key=${appKey}&type=public&random=true`;
+  }
+
+  if (timeMaxUnpacked !== "nuthin") {
+    url += `&time=${timeMax}`;
+    console.log("huh")
+  }
+  if (excludedUnpacked != "nuthin") {
+    for (const item of excluded.split(" ")) {
+      console.log("what")
+      url += `&excluded=${item}`;
+    }
+  }
+
+  useEffect( () => { 
+      async function fetchData() {
+        const res = await fetch(url);
+        const data = await res.json();
+        console.log(data.hits.map(resipee => resipee.recipe)[0].images.REGULAR.url)
+        console.log(data.hits.map(resipee => resipee.recipe)[0].name)
+        setRecipes(data.hits.map(resipee => resipee.recipe));
+      }
+      
+      if (recipes.length === 0) {
+        fetchData();
+      }
+  }, []);
+
   return (
     <ImageList sx={{ width: 500, height: 450 }}>
        <ImageListItem key="Subheader" cols={2}>
         <ListSubheader component="div">Recipes</ListSubheader>
       </ImageListItem>
-       {list.map((recipe) => (
-        <ImageListItem key={recipe.images.REGULAR.url} onClick={() => updateRecipe(recipe.uri)} >
+       {recipes.map((recipe) => (
+        <ImageListItem key={JSON.stringify(recipe.images.REGULAR.url)} onClick={() => updateRecipeUnpacked(JSON.stringify(recipe.uri))} >
           <img
-            srcSet={`${recipe.images.REGULAR.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            src={`${recipe.images.REGULAR.url}?w=248&fit=crop&auto=format`}
-            alt={recipe.name}
+            srcSet={`${JSON.stringify(recipe.images.REGULAR.url)}?w=248&fit=crop&auto=format&dpr=2 2x`}
+            src={`${JSON.stringify(recipe.images.REGULAR.url)}?w=248&fit=crop&auto=format`}
+            alt={JSON.stringify(recipe.name)}
             loading="lazy"
           />
-          <ImageListItemBar title={recipe.name} />
+          <ImageListItemBar title={JSON.stringify(recipe.name)} />
         </ImageListItem>
       ))}
     </ImageList>
@@ -66,7 +85,7 @@ function ViewRecipe({uri}) {
 
 // {search, health, timeMax, excluded}
 
-function FindRecipeForm({updateRecipe}) {
+function FindRecipeForm(updateRecipe) {
   const [isSubmitted, submit] = useState(false);
   const [search, setSearch] = useState("");
   const [time, setTime] = useState("");
@@ -74,19 +93,15 @@ function FindRecipeForm({updateRecipe}) {
 
 
   const handleSubmit = () => {
-    if (search.length === 0) {
-      console.log("bruh");
+    if (search === "") {
       setSearch("nuthin");
     }
-
-    if (time.length === 0) {
+    if (time === "") {
       setTime("nuthin");
     }
-
-    if (excluded.length === 0) {
+    if (excluded === "") {
       setExcluded("nuthin");
     }
-    console.log(search);
     submit(true);
   }
   const styleContainer = {
